@@ -13,7 +13,6 @@ let clients = [];
 server.on("message", function (message, info) {
     console.log("--> from " + info.address + ":" + info.port);
     clients.push(info);
-    console.log(clients);
 });
 
 app.use(bodyParser.json());
@@ -35,21 +34,21 @@ app.post('/status', (req, res) => {
                 fs.writeFile("data", "on", (err) => { if (err) return console.log(err) });
                 clients.forEach(e => {
                     server.send('on', e.port, e.address)
-                    console.log('UDP SENT --> ' + e.port + ' ' + e.address);
+                    console.log('UDP SENT --> ' + e.address + ':' + e.port);
                 });
                 return res.status(200).send({ status: 200, result: 'on' });
             case 'off':
                 fs.writeFile("data", "off", (err) => { if (err) return console.log(err) });
                 clients.forEach(e => {
                     server.send('off', e.port, e.address)
-                    console.log('UDP SENT --> ' + e.port + ' ' + e.address);
+                    console.log('UDP SENT --> ' + e.address + ':' + e.port);
                 });
                 return res.status(200).send({ status: 200, result: 'off' });
             default:
                 fs.writeFile("data", "off", (err) => { if (err) return console.log(err) });
                 clients.forEach(e => {
                     server.send('off', e.port, e.address)
-                    console.log('UDP SENT --> ' + e.port + ' ' + e.address);
+                    console.log('UDP SENT --> ' + e.address + ':' + e.port);
                 });
                 return res.status(200).send({ status: 200, result: 'off' });
         }
